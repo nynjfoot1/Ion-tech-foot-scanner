@@ -29,7 +29,7 @@ html,body{height:100%;min-height:100dvh;background:#0d0f18;color:#eceff4;font-fa
 .pin-hint{font-size:13px;color:#6b7280;height:18px;margin-bottom:24px;text-align:center}
 .pin-hint.err{color:#ff3b30}
 .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:320px}
-.nk{height:72px;border-radius:16px;background:#1e2235;border:1px solid #2a2f45;font-size:26px;font-weight:600;color:#eceff4;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;touch-action:manipulation;user-select:none}
+.nk{height:72px;border-radius:16px;background:#1e2235;border:1px solid #2a2f45;font-size:26px;font-weight:600;color:#eceff4;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;touch-action:manipulation;user-select:none;text-decoration:none;-webkit-tap-highlight-color:rgba(230,57,70,.3)}
 .nk:active{background:#e63946;color:#fff;transform:scale(.94)}
 .nk.ghost{visibility:hidden}
 .nk.del{font-size:20px}
@@ -184,19 +184,19 @@ textarea{min-height:90px;resize:none;font-family:inherit}
     <div class="pin-dot" id="pd3"></div>
   </div>
   <p class="pin-hint" id="pin-hint">Enter your 4-digit PIN</p>
-  <div class="numpad">
-    <button class="nk" data-k="1">1</button>
-    <button class="nk" data-k="2">2</button>
-    <button class="nk" data-k="3">3</button>
-    <button class="nk" data-k="4">4</button>
-    <button class="nk" data-k="5">5</button>
-    <button class="nk" data-k="6">6</button>
-    <button class="nk" data-k="7">7</button>
-    <button class="nk" data-k="8">8</button>
-    <button class="nk" data-k="9">9</button>
-    <button class="nk ghost"></button>
-    <button class="nk" data-k="0">0</button>
-    <button class="nk del" data-k="DEL">⌫</button>
+  <div class="numpad" id="numpad">
+    <a class="nk" href="javascript:pinKey('1')">1</a>
+    <a class="nk" href="javascript:pinKey('2')">2</a>
+    <a class="nk" href="javascript:pinKey('3')">3</a>
+    <a class="nk" href="javascript:pinKey('4')">4</a>
+    <a class="nk" href="javascript:pinKey('5')">5</a>
+    <a class="nk" href="javascript:pinKey('6')">6</a>
+    <a class="nk" href="javascript:pinKey('7')">7</a>
+    <a class="nk" href="javascript:pinKey('8')">8</a>
+    <a class="nk" href="javascript:pinKey('9')">9</a>
+    <a class="nk ghost"></a>
+    <a class="nk" href="javascript:pinKey('0')">0</a>
+    <a class="nk del" href="javascript:pinKey('DEL')">⌫</a>
   </div>
 </div>
 
@@ -827,18 +827,7 @@ function changePin() {
 // ═══════════════════════════════════════════════
 loadSettingsUI();
 
-// iOS numpad fix — runs after all functions are defined
-document.querySelectorAll('.numpad .nk').forEach(function(btn) {
-  var key = btn.getAttribute('data-k');
-  if (!key) return;
-  btn.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    pinKey(key);
-  }, {passive: false});
-  btn.addEventListener('click', function(e) {
-    pinKey(key);
-  });
-});
+
 </script>
 </body>
 </html>
