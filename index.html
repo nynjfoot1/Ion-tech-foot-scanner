@@ -743,14 +743,29 @@ function closeEmailModal() {
 }
 
 function sendEmail() {
-  const email = document.getElementById('modal-email').value.trim();
+  var email = document.getElementById('modal-email').value.trim();
   if (!email) { alert('Please enter a lab email address.'); return; }
-  const s = getScans().find(x => x.id === currentScanId);
+  var s = getScans().find(function(x){ return x.id === currentScanId; });
   if (!s) return;
-  const sets = getSettings();
+  var sets = getSettings();
+  var safeName = s.name.replace(/\s+/g,'_');
 
-  // Build email body
-  const body = [
+  // Step 1: Auto-download the foot images to the device
+  if (s.left) {
+    var aL = document.createElement('a');
+    aL.href = s.left;
+    aL.download = safeName + '_LEFT_foot.jpg';
+    aL.click();
+  }
+  if (s.right) {
+    var aR = document.createElement('a');
+    aR.href = s.right;
+    aR.download = safeName + '_RIGHT_foot.jpg';
+    aR.click();
+  }
+
+  // Step 2: Open mail with instructions to attach the downloaded images
+  var body = [
     'ORTHOTIC FABRICATION REQUEST',
     '================================',
     'Patient Name: ' + s.name,
@@ -760,25 +775,31 @@ function sendEmail() {
     'Practice: ' + sets.practice,
     s.notes ? 'Clinical Notes: ' + s.notes : '',
     '',
-    'Foot scan images are attached as downloads.',
-    'Left foot and right foot images have been saved to this device.',
-    'Please download them from the app and attach to your lab order.',
+    '*** FOOT SCAN IMAGES ***',
+    'The foot scan images have been saved to your Photos/Downloads.',
+    'File names:',
+    s.left  ? '  - ' + safeName + '_LEFT_foot.jpg'  : '',
+    s.right ? '  - ' + safeName + '_RIGHT_foot.jpg' : '',
+    'Please attach these images to this email before sending.',
     '',
     '— ION Technology Foot Scanner',
   ].filter(Boolean).join('\n');
 
-  const subject = 'Orthotic Fabrication Request – ' + s.name + ' (' + s.date + ')';
-  window.location.href = 'mailto:' + encodeURIComponent(email)
-    + '?subject=' + encodeURIComponent(subject)
-    + '&body=' + encodeURIComponent(body);
+  var subject = 'Orthotic Fabrication Request – ' + s.name + ' (' + s.date + ')';
+  setTimeout(function() {
+    window.location.href = 'mailto:' + encodeURIComponent(email)
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+  }, 800);
 
   // Mark as sent
-  const scans = getScans();
-  const idx = scans.findIndex(x => x.id === currentScanId);
+  var scans = getScans();
+  var idx = scans.findIndex(function(x){ return x.id === currentScanId; });
   if (idx >= 0) { scans[idx].sent = true; scans[idx].sentAt = new Date().toISOString(); saveScans(scans); }
 
   closeEmailModal();
   openDetail(currentScanId);
+  alert('Images downloaded to your device. When your email opens, attach the images from your Photos/Files app.');
 }
 
 // ═══════════════════════════════════════════════
