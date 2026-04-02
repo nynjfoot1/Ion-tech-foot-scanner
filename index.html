@@ -412,22 +412,34 @@ textarea{min-height:90px;resize:none;font-family:inherit}
 
     <!-- STEP 1: Save images -->
     <div style="background:#1e2235;border-radius:12px;padding:16px;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#e63946;letter-spacing:.05em;margin-bottom:10px">STEP 1 — SAVE FOOT IMAGES</div>
-      <p style="font-size:13px;color:#b0b8cc;margin:0 0 12px">Tap each button to save the foot photo to your iPhone Photos app.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a id="save-left-btn"  href="#" onclick="saveImage('left');return false;"  style="flex:1;min-width:120px;background:#16a34a;color:#fff;text-align:center;padding:12px 8px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;display:block">&#128247; Save LEFT Foot</a>
-        <a id="save-right-btn" href="#" onclick="saveImage('right');return false;" style="flex:1;min-width:120px;background:#16a34a;color:#fff;text-align:center;padding:12px 8px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;display:block">&#128247; Save RIGHT Foot</a>
+      <div style="font-size:13px;font-weight:700;color:#e63946;letter-spacing:.05em;margin-bottom:8px">STEP 1 — SAVE FOOT IMAGES</div>
+      <div style="background:#0f4c1e;border:1px solid #16a34a;border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px;color:#86efac;line-height:1.6">
+        📱 <strong>On iPhone:</strong> Tap the image to view it full screen, then <strong>press and hold the photo</strong> until the menu appears. Tap <strong>&ldquo;Save to Photos&rdquo;</strong>. Do this for both feet.
       </div>
-      <p style="font-size:11px;color:#6b7280;margin:10px 0 0">If save doesn&#39;t start automatically, press &amp; hold the image below and choose <strong>Save to Photos</strong>.</p>
-      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-        <div style="flex:1;text-align:center">
-          <p style="font-size:12px;color:#9ca3af;margin:0 0 4px;font-weight:700">LEFT FOOT</p>
-          <img id="send-img-left"  src="" style="width:100%;max-width:160px;border-radius:8px;border:2px solid #2a2f45" />
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div id="save-left-btn" style="flex:1;text-align:center;cursor:pointer" onclick="viewFullImage('left')">
+          <div style="font-size:12px;font-weight:700;color:#e63946;margin-bottom:6px">&#9660; TAP TO VIEW &amp; SAVE</div>
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px">LEFT FOOT</div>
+          <img id="send-img-left" src="" style="width:100%;max-width:180px;border-radius:10px;border:3px solid #16a34a;display:block;margin:0 auto" />
         </div>
-        <div style="flex:1;text-align:center">
-          <p style="font-size:12px;color:#9ca3af;margin:0 0 4px;font-weight:700">RIGHT FOOT</p>
-          <img id="send-img-right" src="" style="width:100%;max-width:160px;border-radius:8px;border:2px solid #2a2f45" />
+        <div id="save-right-btn" style="flex:1;text-align:center;cursor:pointer" onclick="viewFullImage('right')">
+          <div style="font-size:12px;font-weight:700;color:#e63946;margin-bottom:6px">&#9660; TAP TO VIEW &amp; SAVE</div>
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px">RIGHT FOOT</div>
+          <img id="send-img-right" src="" style="width:100%;max-width:180px;border-radius:10px;border:3px solid #16a34a;display:block;margin:0 auto" />
         </div>
+      </div>
+    </div>
+
+    <!-- Full-screen image viewer for saving -->
+    <div id="img-viewer" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.96);z-index:9999;flex-direction:column;align-items:center;justify-content:center">
+      <div style="background:#16a34a;color:#fff;padding:14px 20px;text-align:center;width:100%;box-sizing:border-box;font-size:14px;font-weight:700;line-height:1.6">
+        Press &amp; hold the photo below &rarr; tap <strong>&ldquo;Save to Photos&rdquo;</strong>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px;width:100%;box-sizing:border-box">
+        <img id="img-viewer-photo" src="" style="max-width:100%;max-height:70vh;border-radius:12px;border:3px solid #16a34a" />
+      </div>
+      <div style="padding:16px;width:100%;box-sizing:border-box">
+        <button onclick="closeImageViewer()" style="width:100%;background:#374151;color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700">Done — Close</button>
       </div>
     </div>
 
@@ -791,19 +803,19 @@ function openSendScreen() {
   showScreen('send-screen');
 }
 
-function saveImage(foot) {
+function viewFullImage(foot) {
   var s = getScans().find(function(x){ return x.id === currentScanId; });
   if (!s) return;
   var dataUrl = foot === 'left' ? s.left : s.right;
   if (!dataUrl) return;
-  var safeName = (s.name || 'patient').replace(/\s+/g,'_');
-  var filename  = safeName + '_' + foot.toUpperCase() + '_foot.jpg';
-  var a = document.createElement('a');
-  a.href     = dataUrl;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  var viewer = document.getElementById('img-viewer');
+  document.getElementById('img-viewer-photo').src = dataUrl;
+  viewer.style.display = 'flex';
+}
+
+function closeImageViewer() {
+  document.getElementById('img-viewer').style.display = 'none';
+  document.getElementById('img-viewer-photo').src = '';
 }
 
 function openMailApp(linkEl) {
