@@ -456,17 +456,7 @@ function pinKey(k) {
   }
 }
 
-// iOS-safe numpad: use pointerdown which fires immediately on all devices
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.numpad .nk').forEach(function(btn) {
-    var key = btn.getAttribute('data-k');
-    if (!key) return;
-    btn.addEventListener('pointerdown', function(e) {
-      e.preventDefault();
-      pinKey(key);
-    });
-  });
-});
+
 
 function renderPinDots(err) {
   for (let i = 0; i < 4; i++) {
@@ -836,6 +826,19 @@ function changePin() {
 // INIT
 // ═══════════════════════════════════════════════
 loadSettingsUI();
+
+// iOS numpad fix — runs after all functions are defined
+document.querySelectorAll('.numpad .nk').forEach(function(btn) {
+  var key = btn.getAttribute('data-k');
+  if (!key) return;
+  btn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    pinKey(key);
+  }, {passive: false});
+  btn.addEventListener('click', function(e) {
+    pinKey(key);
+  });
+});
 </script>
 </body>
 </html>
