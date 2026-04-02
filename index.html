@@ -185,18 +185,18 @@ textarea{min-height:90px;resize:none;font-family:inherit}
   </div>
   <p class="pin-hint" id="pin-hint">Enter your 4-digit PIN</p>
   <div class="numpad">
-    <button class="nk" onclick="pinKey('1')">1</button>
-    <button class="nk" onclick="pinKey('2')">2</button>
-    <button class="nk" onclick="pinKey('3')">3</button>
-    <button class="nk" onclick="pinKey('4')">4</button>
-    <button class="nk" onclick="pinKey('5')">5</button>
-    <button class="nk" onclick="pinKey('6')">6</button>
-    <button class="nk" onclick="pinKey('7')">7</button>
-    <button class="nk" onclick="pinKey('8')">8</button>
-    <button class="nk" onclick="pinKey('9')">9</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('1')" onclick="pinKey('1')">1</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('2')" onclick="pinKey('2')">2</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('3')" onclick="pinKey('3')">3</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('4')" onclick="pinKey('4')">4</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('5')" onclick="pinKey('5')">5</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('6')" onclick="pinKey('6')">6</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('7')" onclick="pinKey('7')">7</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('8')" onclick="pinKey('8')">8</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('9')" onclick="pinKey('9')">9</button>
     <button class="nk ghost"></button>
-    <button class="nk" onclick="pinKey('0')">0</button>
-    <button class="nk del" onclick="pinKey('DEL')">⌫</button>
+    <button class="nk" ontouchstart="event.preventDefault();pinKey('0')" onclick="pinKey('0')">0</button>
+    <button class="nk del" ontouchstart="event.preventDefault();pinKey('DEL')" onclick="pinKey('DEL')">⌫</button>
   </div>
 </div>
 
