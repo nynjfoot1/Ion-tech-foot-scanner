@@ -420,7 +420,7 @@ textarea{min-height:90px;resize:none;font-family:inherit}
 // STORAGE
 // ═══════════════════════════════════════════════
 // In-memory store (data lives in session; export images to save permanently)
-const _store = {
+var _store = {
   pin: '1234',
   settings: { doctor: 'Dr. Greg A. Rivera', practice: 'ION Technology', labName: '', labEmail: '' },
   scans: [],
@@ -444,7 +444,7 @@ function showScreen(id) {
 // ═══════════════════════════════════════════════
 // PIN
 // ═══════════════════════════════════════════════
-let pinBuffer = '';
+var pinBuffer = '';
 
 function pinKey(k) {
   if (k === 'DEL') { pinBuffer = pinBuffer.slice(0, -1); renderPinDots(); return; }
@@ -499,7 +499,7 @@ function renderDash() {
   document.getElementById('dash-count').textContent = scans.length + ' scan' + (scans.length !== 1 ? 's' : '') + ' recorded';
   const list = document.getElementById('scan-list');
   if (scans.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">👣</div><div class="empty-title">No scans yet</div><div class="empty-sub">Tap "New Scan" to capture your first patient's feet</div></div>';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">👣</div><div class="empty-title">No scans yet</div><div class="empty-sub">Tap &quot;New Scan&quot; to capture your first patient&#39;s feet</div></div>';
     return;
   }
   list.innerHTML = [...scans].reverse().map(s => `
@@ -529,7 +529,7 @@ function deleteScan(id) {
 // ═══════════════════════════════════════════════
 // NEW SCAN
 // ═══════════════════════════════════════════════
-let draftScan = {};
+var draftScan = {};
 
 function startNewScan() {
   draftScan = { left: null, right: null };
@@ -542,9 +542,9 @@ function startNewScan() {
 // ═══════════════════════════════════════════════
 // CAMERA
 // ═══════════════════════════════════════════════
-let camStream = null;
-let camFacing = 'environment';
-let camFoot = 'left';
+var camStream = null;
+var camFacing = 'environment';
+var camFoot = 'left';
 
 async function goToCamera(foot) {
   const name = document.getElementById('f-name').value.trim();
@@ -673,7 +673,7 @@ function saveScan() {
 // ═══════════════════════════════════════════════
 // DETAIL
 // ═══════════════════════════════════════════════
-let currentScanId = null;
+var currentScanId = null;
 
 function openDetail(id) {
   currentScanId = id;
